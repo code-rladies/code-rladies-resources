@@ -1,2 +1,2 @@
 # code-rladies-resources
-Resources and branding for Code-RLadies Mid Mo.
+Public resources for Code-RLadies Mid Mo.
