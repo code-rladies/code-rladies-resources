@@ -1,0 +1,186 @@
+---
+title: "Plotting in R"
+author: "Ellen Fitzsimmons"
+date: "6/23/2020"
+output: html_document
+---
+
+Before you can make nifty plots in R, you need to have some data to play around with. R is able to import all sorts of data through the GUI and code! Of course, R also has a great selection of data built in. 
+
+```{r packages, echo=FALSE, message=FALSE}
+# install.packages("utils")
+# install.packages("readxl")
+# install.packages("Hmisc")
+# install.packages("graphics")
+# install.packages("stats")
+library(utils) # csv
+library(readxl) # excel
+library(Hmisc) # SPSS and SAS
+library(graphics)
+library(stats)
+```
+
+```{r importdatacsv, echo=TRUE, eval=FALSE}
+# how to import CSV
+# first row contains variable names, comma is separator
+# assign the variable id to row names
+# note the / instead of \ on mswindows systems
+
+mydata <- read.table("c:/mydata.csv", header=TRUE,
+   sep=",", row.names="id")
+```
+
+```{r importdataxl, echo=TRUE, eval=FALSE}
+# how to import excel
+# read in the first worksheet from the workbook myexcel.xlsx
+# first row contains variable names
+mydata <- read_excel("c:/myexcel.xlsx", 1)
+
+# read in the worksheet named mysheet
+mydata <- read_excel("c:/myexcel.xlsx", sheet = "mysheet")
+```
+
+```{r importdataspss, echo=TRUE, eval=FALSE}
+# how to import SPSS
+# save SPSS dataset in trasport format
+# get file='c:\mydata.sav'.
+# export outfile='c:\mydata.por'.
+# in R
+mydata <- spss.get("c:/mydata.por", use.value.labels=TRUE)
+# last option converts value labels to R factors
+```
+
+```{r importdatasas, echo=TRUE, eval=FALSE}
+#how to import SAS
+# save SAS dataset in trasport format
+# libname out xport 'c:/mydata.xpt';
+# data out.mydata;
+# set sasuser.mydata;
+# run;
+# in R
+mydata <- sasxport.get("c:/mydata.xpt")
+# character variables are converted to R factors
+```
+
+Let's try importing an excel file. Here we have some data on sales for an imaginary stationary company. It includes when the order was placed,
+the region in which the sale was made, the sales representative's name, the item sold, the number of units sold, the cost of a single unit, and the total cost of the order. This file has multiple sheets in it, so with the code below we are able to import a specific sheet of the given excel file into R. Note: be sure to set your working directory to the file where you are storing the excel file so that the code using just the name of the excel file works. Another option would be writing out the filepath as can be seen in the first import example below.
+
+```{r importdataex, echo=TRUE, eval=FALSE}
+mydata <- read_excel("C:/File/path/to/SampleData.xlsx", sheet = "SalesOrders")
+```
+
+```{r importdata, echo=TRUE}
+# how to import excel
+# read in the first worksheet from the workbook myexcel.xlsx
+# first row contains variable names
+# data from: https://www.contextures.com/xlSampleData01.html
+mydata <- read_excel("SampleData.xlsx", sheet = "SalesOrders")
+
+```
+
+```{r hist, echo=TRUE}
+hist(mydata$Units,main="Distribution of Number of Units Sold",
+     xlab="Number of Units Sold")
+```
+
+```{r boxplot1, echo=TRUE}
+boxplot(mydata$`Unit Cost`, ylab = "Unit Cost",
+        main = "Box Plot of Cost per Unit")
+```
+
+
+```{r boxplot2, echo=TRUE}
+boxplot(mydata$Units, ylab = "Number of Units", 
+        main = "Boxplot of Number of Units Sold")
+```
+
+```{r scatter1, echo=TRUE}
+plot(mydata$Units, mydata$`Unit Cost`, xlab = "Number of Units", 
+     ylab = "Cost per Unit", main = "Correlation between Number of Units and Cost per Unit")
+cor(mydata$Units, mydata$`Unit Cost`)
+```
+
+```{r scatter2, echo=TRUE}
+plot(mydata$Units, mydata$Total, xlab = "Number of Units", 
+     ylab = "Total Cost", main = "Correlation between Number of Units and Total Cost")
+cor(mydata$Units, mydata$Total)
+```
+
+```{r scatter3, echo=TRUE}
+plot(mydata$`Unit Cost`, mydata$Total, xlab = "Cost per Unit", 
+     ylab = "Total Cost", main = "Correlation between Cost per Unit and Total Cost")
+cor(mydata$`Unit Cost`, mydata$Total)
+```
+
+```{r qqplot}
+qqnorm(mydata$Total,
+       main="Normal Q-Q Plot of Total Cost",
+         xlab="Theoretical Quantiles of Total Cost",
+         ylab="Sample Quantiles of Total Cost")
+qqline(mydata$Total)
+```
+
+This may be a little out of scope for the current presentation, but while we're on the topic, here is some ways to create graphs for assumption checking. (Here's also an example that uses one of the many wonderful data sets in R!)
+
+```{r lm, echo=TRUE}
+# create linear model
+eruption.lm = lm(eruptions ~ waiting, data=faithful)
+
+# calculate residuals
+eruption.res = resid(eruption.lm)
+
+```
+
+```{r residplot, echo=TRUE}
+# residual plot of residuals against observed values of waiting
+plot(faithful$waiting, eruption.res, 
+     ylab="Residuals", xlab="Waiting Time", 
+     main="Old Faithful Eruptions") 
+abline(0, 0)
+```
+
+```{r assumptions, echo=TRUE}
+# creates space that will have 4 spaces
+par(mfrow = c(2, 2))
+
+#assumption checking plots
+plot(eruption.lm)
+```
+
+The diagnostic plots show residuals in four different ways:
+
+- Residuals vs Fitted. Used to check the linear relationship assumptions. A horizontal line, without distinct patterns is an indication for a linear relationship.
+
+- Normal Q-Q. Used to examine whether the residuals are normally distributed. It’s good if residuals points follow the straight dashed line.
+
+- Scale-Location (or Spread-Location). Used to check the homogeneity of variance of the residuals (homoscedasticity). Horizontal line with equally spread points is a good indication of homoscedasticity. 
+
+- Residuals vs Leverage. Used to identify influential cases/extreme values that might influence the regression results when included or excluded from the analysis.
+
+The four plots show the top 3 most extreme data points labeled with with the row numbers of the data in the data set. They might be potentially problematic. You might want to take a close look at them individually to check if there is anything special for the subject or if it could be simply data entry errors.
+
+If you want individual assumption plots, you can extract them in the following way:
+
+```{r residassumptions, echo=TRUE}
+# Residual vs Fitted
+plot(eruption.lm, 1)
+```
+
+```{r qqassumptions, echo=TRUE}
+# Normal QQ
+plot(eruption.lm, 2)
+```
+
+```{r scaleassumptions, echo=TRUE}
+# Scale-Location
+plot(eruption.lm, 3)
+```
+
+```{r cookdassumptions, echo=TRUE}
+# Cook's D
+plot(eruption.lm, 4)
+```
+
+
+
+
