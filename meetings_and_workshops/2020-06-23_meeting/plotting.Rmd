@@ -81,6 +81,7 @@ mydata <- read_excel("SampleData.xlsx", sheet = "SalesOrders")
 ```{r hist, echo=TRUE}
 hist(mydata$Units,main="Distribution of Number of Units Sold",
      xlab="Number of Units Sold")
+
 ```
 
 ```{r boxplot1, echo=TRUE}
