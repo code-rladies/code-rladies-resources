@@ -1,7 +1,7 @@
 ---
 title: 'RLadies Meeting: Functions'
 author: "Ellen Fitzsimmons"
-date: "8/25/2020"
+date: "8/25git st/2020"
 output: beamer_presentation
 ---
 
