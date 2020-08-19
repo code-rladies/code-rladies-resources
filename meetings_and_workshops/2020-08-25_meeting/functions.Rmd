@@ -1,35 +1,171 @@
 ---
-title: 'RLadies Meeting: Functions'
-author: "Ellen Fitzsimmons"
-date: "8/25git st/2020"
-output: beamer_presentation
+title: "RLadies August Meeting: Functions"
+author: "Ellen Fitzsimmons & Hope Snyder"    
+date: "8/25/20"
+header-includes:
+  - \usepackage{amsmath, amssymb,amsthm,amsfonts}
+  - \usepackage{multicol}
+  - \usepackage[usenames,dvipsnames]{pstricks}
+  - \usepackage{graphicx}
+  - \usetheme{Warsaw}
+  - \usecolortheme{dolphin}
+  - \AtBeginSection{}
+  - \AtBeginSubsection{}
+output: 
+  beamer_presentation:
+    toc: false
+    slide_level: 3
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## R Markdown
+# Basics
 
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## What is a Function?
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+### What is a function?
 
-## Slide with Bullets
+- A function is a set of statements organized together to perform a certain task
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+\[y= mx+b\]
 
-## Slide with R Output
+## Basic parts
 
-```{r cars, echo = TRUE}
-summary(cars)
+### Basic Parts
+- Name
+- Input
+- Computation
+- Output
+
+## Example
+### Computing the Slope
+
+Name:
+
+```{r, eval = FALSE, echo = TRUE}
+slope <- function(){}
 ```
 
-## Slide with Plot
+### Computing the Slope
 
-```{r pressure}
-plot(pressure)
+Input:
+
+```{r, eval = FALSE, echo = TRUE}
+slope <- function(X, Y, B){}
 ```
+
+```{r, eval = FALSE, echo = TRUE}
+slope <- function(coords, constant){}
+```
+
+### Computing the Slope
+
+Computations:
+
+```{r, eval = FALSE, echo = TRUE}
+slope <- function(X, Y, B){
+  (Y-B)/X
+}
+```
+
+### Computing the Slope
+
+Output:
+
+```{r, eval = FALSE, echo = TRUE}
+slope <- function(X, Y, B){
+  M = (Y-B)/X
+  
+  print("The slope is equal to ", M)
+}
+```
+
+### Computing the Slope
+
+Use:
+
+```{r, echo = TRUE}
+slope <- function(X, Y, B){
+  M = (Y-B)/X
+  
+  print(paste("The slope is equal to ", M))
+}
+
+slope(2,5,7)
+```
+
+# Advanced
+
+## When to Use
+
+### When to Use
+
+- Almost whenever you want!
+- When your code repeats a lot
+- Something you will want to use in the future
+- When you want to apply the code to multiple things at once
+- Writing a package
+
+## Nesting functions
+
+### Nesting functions
+
+Functions can be called from within other functions!
+
+```{r, echo = TRUE}
+dat <- mtcars
+
+pick_a_color <- function(x){
+  I=length(unique(x))
+  myColor=hsv((1:I)/I,1,.7,1)
+  return(myColor)
+}
+
+My_plot=function(x,y,...){
+  color = pick_a_color(x)
+  
+  boxplot(y~x,col=color,... )
+}
+```
+
+### Nesting functions
+```{r, echo = TRUE, fig.height = 7, fig.width = 12}
+My_plot(dat$gear,dat$mpg,xlab="gear", ylab="MPG")
+```
+
+
+## Using Functions on Multiple Values
+
+### `purrr` 
+
+You can apply functions to a table of values!
+
+```{r, echo = TRUE}
+lm(dat$mpg ~ dat$gear)
+```
+
+### `purrr` 
+
+```{r, echo = TRUE}
+slope <- function(Y,X){
+  (Y-5.623)/X
+}
+
+library(purrr)
+mat <- purrr::map2_dbl(dat$mpg, dat$gear, slope)
+```
+
+### `purrr` 
+
+```{r, echo = TRUE}
+mat <- matrix(mat, ncol = 4, byrow = TRUE)
+mat
+```
+
+
+
+
+
 
