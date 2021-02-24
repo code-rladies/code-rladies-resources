@@ -1,0 +1,68 @@
+---
+title: "Example Rmd"
+author: "Ellen Fitzsimmons"
+date: "1/26/2021"
+output: pdf_document
+---
+
+## R Markdown (you can use pound signs for different sizes of headers)
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** (double asterisks can make something bold) button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+R Markdown can be very easy to use. For one, it gives you examples of how to use it every time you create a new file. Everything above automatically populates when you create a new rmd file (I've included some notes above). 
+
+Now I'll have some examples of how to use some other features in rmd. 
+
+I can make a table of some data this way:
+
+\begin{center} 
+80 89 81 83 84 83 85 86 89 92 87 84 87 87 84 84
+\end{center}
+
+This just presents the data in a pretty way to the viewer. I can also put the data in a code chunk for analyses like below: 
+
+```{r order, echo=FALSE}
+    order <- c(80, 89, 81, 83, 84, 83, 85, 86, 89, 92, 87, 84, 87, 87, 84, 84)
+    sort <- sort(order)
+    sort
+```
+   
+If I'm taking these data and would like to report the 25th and 75th percentiles (i.e., the interquartile range), I can calculate it in a code chunk and then write it like I do below to call results: 
+
+```{r percentile, echo = TRUE}
+    n <- length(order)
+    # 25th percentile
+    p1 <- 0.25
+    adotb1 <- p1*(n+1)
+    # a = 4 and b = 25
+    y25 <- sort[4] + 0.25*(sort[5] - sort[4])
+    # 75th percentile
+    p2 <- 0.75
+    adotb2 <- p2*(n+1)
+    # a = 12 and b = 75
+    y75 <- sort[12] + 0.75*(sort[13] - sort[12])
+```
+
+  For the above data, n = `r n` (the back quotes with r and then an object name will give the numerical value for that object) and when finding the 25th percentile $p = 0.25$ (using dollar signs will help you with in text formulas). $p(n + 1) = 0.25*(16 + 1)$ = `r adotb1`, so $$y_p = y_{(a)} + .b(y_{(a+1)} - y_{(a)})$$ (double dollar signs will give you out of text formulas)
+    $$y_{0.25} = y_{(4)} + .25(y_{(5)} - y_{(4)})$$
+    The 25th percentile is `r y25`.\
+    For the 75th percentile $p = 0.75$ and $p(n + 1) = 0.75*(16 + 1)$ = `r adotb2`, so $$y_p = y_{(a)} + .b(y_{(a+1)} - y_{(a)})$$
+    $$y_{0.75} = y_{(12)} + .75(y_{(13)} - y_{(12)})$$ The 75th percentile is `r y75`.
+    

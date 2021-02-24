@@ -1,0 +1,60 @@
+%% ------------------------------------------------------------
+%% Charlie Redmon
+%% 20170923
+%% semTikzStyle.tex: style configurations for SEM path diagrams
+%% modified for poster by Ed
+%% ------------------------------------------------------------
+
+\usepackage{tikz}
+
+
+% observed variable
+\tikzstyle{ov}=[shape=rectangle,
+                draw=black!80,
+                minimum height=2cm,
+                minimum width=2cm,
+                thick]
+
+% response variable
+\tikzstyle{av}=[shape=rectangle,
+                draw=black!80,
+                fill=black!10,
+                minimum height=2cm,
+                minimum width=2cm,
+                thick]
+
+% latent variable
+\tikzstyle{lv}=[shape=circle,
+                draw=black!80,
+                thick,
+                minimum width=2cm]
+             
+          	 
+% correlations
+\tikzstyle{lcor}=[bend left=30, dashed]
+\tikzstyle{rcor}=[bend right=30, dashed]
+
+% self-loops (for variance)
+\tikzstyle{lloop}=[loop left, 
+                   out=210, 
+                   in=150, 
+                   distance=0.3cm,
+                   densely dotted]
+
+\tikzstyle{rloop}=[loop right, 
+                   out=30, 
+                   in=-30, 
+                   distance=1.5cm,
+                   densely dotted]
+
+\tikzstyle{aloop}=[loop above, 
+                   out=60, 
+                   in=120, 
+                   distance=0.3cm,
+                   densely dotted]
+
+\tikzstyle{bloop}=[loop below, 
+                   out=-60, 
+                   in=-120, 
+                   distance=0.3cm,
+                   densely dotted]
